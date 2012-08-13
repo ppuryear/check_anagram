@@ -1,0 +1,35 @@
+# Copyright 2012 Philip Puryear
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# TODO: This file really shouldn't be hand-written.
+
+cxx = clang++
+cflags = -O4 -march=native -std=c++11
+ldflags = -O4 -Wl,-O1,--sort-common,--as-needed,-z,relro
+
+rule cxx
+  command = $cxx -MMD -MT $out -MF $out.d $cflags -c $in -o $out
+  description = CXX $out
+  depfile = $out.d
+
+rule link
+  command = $cxx $ldflags -o $out $in $libs
+  description = LINK $out
+
+build check_anagram.o: cxx check_anagram.cc
+build check_anagram: link check_anagram.o
+  libs = -lboost_program_options -lboost_regex
+
+default check_anagram
+
