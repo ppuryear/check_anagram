@@ -63,18 +63,18 @@ string StripInput(string input, const boost::regex& strip_regex) {
 }
 
 bool CheckAnagrams(string a, string b) {
-  // Fast path: a and b cannot be anagrams if their lengths differ.
-  if (a.length() != b.length())
-    return false;
+    // Fast path: a and b cannot be anagrams if their lengths differ.
+    if (a.length() != b.length())
+        return false;
 
-  sort(a.begin(), a.end());
-  sort(b.begin(), b.end());
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
 
-  return a.compare(b) == 0;
+    return a.compare(b) == 0;
 }
 
 void Usage(boost::program_options::options_description options_desc) {
-    cout << "usage: check_anagram [options] string1 string2\n\n"; 
+    cout << "usage: check_anagram [options] string1 string2\n\n";
     cout << "Determine if two strings are anagrams.\n\n";
     cout << options_desc << endl;
 }
@@ -126,7 +126,7 @@ void ParseProgramArguments(int argc, char** argv) {
         Usage(visible_options);
         exit(EXIT_SUCCESS);
     }
-    
+
     if (g_program_args.string1.empty() || g_program_args.string2.empty())
         Fatal("not enough inputs");
 }

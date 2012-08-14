@@ -37,7 +37,7 @@ def get_strip_regex(program_args):
         regex_string += r'\W'
     if program_args.ignore_chars:
         regex_string += re.escape(program_args.ignore_chars)
-    
+
     if regex_string:
         regex_string = '[' + regex_string + ']'
     return re.compile(regex_string)
