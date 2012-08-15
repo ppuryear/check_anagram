@@ -1,3 +1,5 @@
+check_anagram
+=============
 This repository contains a small tool that allows you to check whether two
 strings are anagrams.
 
@@ -18,7 +20,7 @@ system:
 
 *   [ninja](http://martine.github.com/ninja/) (a small build system similar to
     make)
-*   [boost](http://www.boost.org/)
+*   [boost](http://www.boost.org/) >= 1.50
 
 Run `ninja` in the directory containing `build.ninja` to build the executable.
 

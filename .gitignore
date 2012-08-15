@@ -4,3 +4,4 @@
 check_anagram
 __pycache__/
 .ninja_log
+.DS_Store
