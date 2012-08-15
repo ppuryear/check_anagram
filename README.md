@@ -1,9 +1,10 @@
 This repository contains a small tool that allows you to check whether two
 strings are anagrams.
 
-Currently, there are two implementations: one in C++ (`check_anagram.cc`) and
-one in Python (`check_anagram.py`). Both are invoked using the same
-command-line syntax, so which one you use is a matter of preference.
+Currently, there are three implementations: one in Python (`check_anagram.py`),
+one in C++ (`check_anagram.cc`), and one in Go (`check_anagram.go`). All are
+invoked using roughly the same command-line syntax, so which one you use is a
+matter of preference.
 
 Python
 ------
@@ -20,4 +21,9 @@ system:
 *   [boost](http://www.boost.org/)
 
 Run `ninja` in the directory containing `build.ninja` to build the executable.
+
+Go
+---
+The [Go](http://golang.org) implementation can be built via
+`go build check_anagram.go` or similar.
 
