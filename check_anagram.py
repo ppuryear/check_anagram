@@ -27,20 +27,7 @@ def setup_argparse():
             help='Do not ignore case.')
     parser.add_argument('-w', '--keep-nonword', action='store_true',
             help='Do not ignore non-word characters.')
-    parser.add_argument('--ignore-chars', default='',
-            help='Ignore all of the characters in the given string.')
     return parser
-
-def get_strip_regex(program_args):
-    regex_string = ''
-    if not program_args.keep_nonword:
-        regex_string += r'\W'
-    if program_args.ignore_chars:
-        regex_string += re.escape(program_args.ignore_chars)
-
-    if regex_string:
-        regex_string = '[' + regex_string + ']'
-    return re.compile(regex_string)
 
 def check_anagrams(string1, string2):
     # Fast path: two strings cannot be anagrams if their lengths differ.
@@ -50,12 +37,13 @@ def check_anagrams(string1, string2):
 
 def main():
     args = setup_argparse().parse_args()
-    strip_regex = get_strip_regex(args)
 
     def strip(input):
         if not args.keep_case:
             input = input.lower()
-        return re.sub(strip_regex, '', input)
+        if not args.keep_nonword:
+            input = re.sub('\\W', '', input)
+        return input
 
     if check_anagrams(strip(args.string1), strip(args.string2)):
         print('Yes.')

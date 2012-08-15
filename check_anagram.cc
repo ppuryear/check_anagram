@@ -24,7 +24,6 @@ using namespace std;
 struct ProgramArguments {
     bool keep_case;
     bool keep_nonword;
-    string ignore_chars;
     string string1;
     string string2;
 } g_program_args;
@@ -32,45 +31,6 @@ struct ProgramArguments {
 void Fatal(const string& msg) {
     cerr << "check_anagram: error: " << msg << endl;
     exit(EXIT_FAILURE);
-}
-
-string RegexEscape(const string& s) {
-    const boost::regex special_chars_regex(
-            "[\\^\\.\\$\\|\\{\\}\\(\\)\\[\\]\\*\\+\\?\\/\\\\]");
-    const string replacement("\\\\\\1&");
-    return boost::regex_replace(s, special_chars_regex, replacement,
-            boost::match_default | boost::format_sed);
-}
-
-boost::regex CreateStripRegex() {
-    string regex_string;
-    if (!g_program_args.keep_nonword)
-        regex_string += "\\W";
-    if (!g_program_args.ignore_chars.empty())
-        regex_string += RegexEscape(g_program_args.ignore_chars);
-
-    if (!regex_string.empty()) {
-        regex_string.insert(regex_string.begin(), '[');
-        regex_string.push_back(']');
-    }
-    return boost::regex(regex_string.c_str());
-}
-
-string StripInput(string input, const boost::regex& strip_regex) {
-    if (!g_program_args.keep_case)
-        boost::to_lower(input);
-    return boost::regex_replace(input, strip_regex, "");
-}
-
-bool CheckAnagrams(string a, string b) {
-    // Fast path: a and b cannot be anagrams if their lengths differ.
-    if (a.length() != b.length())
-        return false;
-
-    sort(a.begin(), a.end());
-    sort(b.begin(), b.end());
-
-    return a.compare(b) == 0;
 }
 
 void Usage(boost::program_options::options_description options_desc) {
@@ -90,9 +50,7 @@ void ParseProgramArguments(int argc, char** argv) {
         ("keep-case,c", po::bool_switch(&g_program_args.keep_case),
                 "do not ignore case")
         ("keep-nonword,w", po::bool_switch(&g_program_args.keep_nonword),
-                "do not ignore non-word characters")
-        ("ignore-chars", po::value<string>(&g_program_args.ignore_chars),
-                "ignore all of the characters in the given string");
+                "do not ignore non-word characters");
 
     // Put the positional arguments in a separate group so they can be omitted
     // from Usage().
@@ -131,12 +89,32 @@ void ParseProgramArguments(int argc, char** argv) {
         Fatal("not enough inputs");
 }
 
+string StripInput(string input) {
+    if (!g_program_args.keep_case)
+        boost::to_lower(input);
+    if (!g_program_args.keep_nonword) {
+        boost::regex strip_regex("\\W");
+        input = boost::regex_replace(input, strip_regex, "");
+    }
+    return input;
+}
+
+bool CheckAnagrams(string a, string b) {
+    // Fast path: a and b cannot be anagrams if their lengths differ.
+    if (a.length() != b.length())
+        return false;
+
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+
+    return a.compare(b) == 0;
+}
+
 int main(int argc, char** argv) {
     ParseProgramArguments(argc, argv);
 
-    boost::regex strip_regex = CreateStripRegex();
-    string stripped_string1 = StripInput(g_program_args.string1, strip_regex);
-    string stripped_string2 = StripInput(g_program_args.string2, strip_regex);
+    string stripped_string1 = StripInput(g_program_args.string1);
+    string stripped_string2 = StripInput(g_program_args.string2);
 
     if (CheckAnagrams(stripped_string1, stripped_string2))
         cout << "Yes.";
