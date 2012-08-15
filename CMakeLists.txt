@@ -12,24 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO: This file really shouldn't be hand-written.
+cmake_minimum_required (VERSION 2.6)
+project (check_anagram)
 
-cxx = clang++
-cflags = -O4 -march=native -std=c++11
-ldflags = -O4 -Wl,-O1,--sort-common,--as-needed,-z,relro
-
-rule cxx
-  command = $cxx -MMD -MT $out -MF $out.d $cflags -c $in -o $out
-  description = CXX $out
-  depfile = $out.d
-
-rule link
-  command = $cxx $ldflags -o $out $in $libs
-  description = LINK $out
-
-build check_anagram.o: cxx check_anagram.cc
-build check_anagram: link check_anagram.o
-  libs = -lboost_program_options -lboost_regex
-
-default check_anagram
+find_package(Boost 1.50 COMPONENTS program_options regex REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+add_executable(check_anagram check_anagram.cc)
+target_link_libraries(check_anagram ${Boost_LIBRARIES})
 

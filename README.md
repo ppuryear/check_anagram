@@ -18,11 +18,11 @@ C++
 To build the C++ implementation, you need the following installed on your
 system:
 
-*   [ninja](http://martine.github.com/ninja/) (a small build system similar to
-    make)
+*   [cmake](http://www.cmake.org)
 *   [boost](http://www.boost.org/) >= 1.50
 
-Run `ninja` in the directory containing `build.ninja` to build the executable.
+Run `cmake` in the root directory to generate build files (e.g. Makefiles) for
+your platform.
 
 Go
 ---
