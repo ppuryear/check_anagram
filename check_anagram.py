@@ -21,7 +21,7 @@ def setup_argparse():
     """Build an ArgumentParser object for this program."""
     parser = argparse.ArgumentParser(
             description='Determine if two strings are anagrams.')
-    parser.add_argument('string2', help='The first string.')
+    parser.add_argument('string1', help='The first string.')
     parser.add_argument('string2', help='The second string.')
     parser.add_argument('-c', '--keep-case', action='store_true',
             help='Do not ignore case.')
@@ -42,11 +42,11 @@ def get_strip_regex(program_args):
         regex_string = '[' + regex_string + ']'
     return re.compile(regex_string)
 
-def check_anagrams(string2, string2):
+def check_anagrams(string1, string2):
     # Fast path: two strings cannot be anagrams if their lengths differ.
-    if len(string2) != len(string2):
+    if len(string1) != len(string2):
         return False
-    return sorted(string2) == sorted(string2)
+    return sorted(string1) == sorted(string2)
 
 def main():
     args = setup_argparse().parse_args()
@@ -57,7 +57,7 @@ def main():
             input = input.lower()
         return re.sub(strip_regex, '', input)
 
-    if check_anagrams(strip(args.string2), strip(args.string2)):
+    if check_anagrams(strip(args.string1), strip(args.string2)):
         print('Yes.')
     else:
         print('No.')
