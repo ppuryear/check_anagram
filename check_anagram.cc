@@ -20,6 +20,7 @@
 #include <boost/regex.hpp>
 
 using namespace std;
+namespace boost_po = boost::program_options;
 
 struct ProgramArguments {
     bool keep_case;
@@ -33,52 +34,50 @@ void Fatal(const string& msg) {
     exit(EXIT_FAILURE);
 }
 
-void Usage(boost::program_options::options_description options_desc) {
+void Usage(const boost_po::options_description& options_desc) {
     cout << "usage: check_anagram [options] string1 string2\n\n";
     cout << "Determine if two strings are anagrams.\n\n";
     cout << options_desc << endl;
 }
 
 void ParseProgramArguments(int argc, char** argv) {
-    namespace po = boost::program_options;
-
     bool show_usage;
 
-    po::options_description visible_options("Options");
+    boost_po::options_description visible_options("Options");
     visible_options.add_options()
-        ("help,h", po::bool_switch(&show_usage), "show usage info")
-        ("keep-case,c", po::bool_switch(&g_program_args.keep_case),
+        ("help,h", boost_po::bool_switch(&show_usage), "show usage info")
+        ("keep-case,c", boost_po::bool_switch(&g_program_args.keep_case),
                 "do not ignore case")
-        ("keep-nonword,w", po::bool_switch(&g_program_args.keep_nonword),
+        ("keep-nonword,w", boost_po::bool_switch(&g_program_args.keep_nonword),
                 "do not ignore non-word characters");
 
     // Put the positional arguments in a separate group so they can be omitted
     // from Usage().
-    po::options_description hidden_options;
+    boost_po::options_description hidden_options;
     hidden_options.add_options()
-        ("string1", po::value<string>(&g_program_args.string1))
-        ("string2", po::value<string>(&g_program_args.string2));
+        ("string1", boost_po::value<string>(&g_program_args.string1))
+        ("string2", boost_po::value<string>(&g_program_args.string2));
 
-    po::positional_options_description positional_args;
+    boost_po::positional_options_description positional_args;
     positional_args.add("string1", 1);
     positional_args.add("string2", 1);
 
-    po::options_description options;
+    boost_po::options_description options;
     options.add(visible_options);
     options.add(hidden_options);
 
-    po::command_line_parser parser(argc, argv);
+    boost_po::command_line_parser parser(argc, argv);
     parser.options(options);
     parser.positional(positional_args);
-    po::variables_map vars_map;
+    boost_po::variables_map vars_map;
     try {
-        po::store(parser.run(), vars_map);
-    } catch (po::error_with_option_name& e) {
+        boost_po::store(parser.run(), vars_map);
+    } catch (boost_po::error_with_option_name& e) {
         Fatal(e.what());
-    } catch (po::too_many_positional_options_error& e) {
+    } catch (boost_po::too_many_positional_options_error& e) {
         Fatal("too many inputs");
     }
-    po::notify(vars_map);
+    boost_po::notify(vars_map);
 
     if (show_usage) {
         Usage(visible_options);
