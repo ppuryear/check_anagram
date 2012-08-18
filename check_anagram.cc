@@ -35,9 +35,9 @@ void Fatal(const string& msg) {
 }
 
 void Usage(const boost_po::options_description& options_desc) {
-    cout << "usage: check_anagram [options] string1 string2\n\n";
-    cout << "Determine if two strings are anagrams.\n\n";
-    cout << options_desc << endl;
+    cerr << "usage: check_anagram [options] string1 string2\n\n"
+            "Prints \"Yes\" if string1 and string2 are anagrams, \"No\" otherwise.\n\n";
+    cerr << options_desc;
 }
 
 void ParseProgramArguments(int argc, char** argv) {
@@ -116,9 +116,9 @@ int main(int argc, char** argv) {
     string stripped_string2 = StripInput(g_program_args.string2);
 
     if (CheckAnagrams(stripped_string1, stripped_string2))
-        cout << "Yes.";
+        cout << "Yes";
     else
-        cout << "No.";
+        cout << "No";
     cout << endl;
     return 0;
 }

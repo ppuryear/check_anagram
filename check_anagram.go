@@ -70,11 +70,10 @@ func StripInput(input string) string {
 }
 
 func Usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s [options] string1 string2\n\n",
-		os.Args[0])
-	fmt.Fprintln(os.Stderr,
-		"Prints 'Yes' if string1 and string2 are anagrams, 'No' otherwise.\n")
-	fmt.Fprintln(os.Stderr, "Options:")
+	fmt.Fprint(os.Stderr,
+		"usage: check_anagram [options] string1 string2\n\n" +
+		"Prints \"Yes\" if string1 and string2 are anagrams, \"No\" otherwise.\n\n" +
+		"Options:\n")
 	flag.PrintDefaults()
 }
 

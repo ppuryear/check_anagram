@@ -20,7 +20,7 @@ import re
 def setup_argparse():
     """Build an ArgumentParser object for this program."""
     parser = argparse.ArgumentParser(
-            description='Determine if two strings are anagrams.')
+            description='Prints "Yes" if string1 and string2 are anagrams, "No" otherwise.')
     parser.add_argument('string1', help='The first string.')
     parser.add_argument('string2', help='The second string.')
     parser.add_argument('-c', '--keep-case', action='store_true',
@@ -46,9 +46,9 @@ def main():
         return input
 
     if check_anagrams(strip(args.string1), strip(args.string2)):
-        print('Yes.')
+        print('Yes')
     else:
-        print('No.')
+        print('No')
 
 if __name__ == '__main__':
     main()
