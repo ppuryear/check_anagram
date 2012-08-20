@@ -64,7 +64,7 @@ func StripInput(input string) string {
 	}
 	if !gProgramArgs.KeepNonword {
 		stripRegexp := regexp.MustCompile("\\W")
-		return stripRegexp.ReplaceAllString(input, "")
+		input = stripRegexp.ReplaceAllString(input, "")
 	}
 	return input
 }
